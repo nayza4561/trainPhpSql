@@ -6,6 +6,7 @@ if ($_POST == true) {
     $lastname = $_POST["lastname"];
     $address = $_POST["address"];
     $password = $_POST["password"];
+    $position = $_POST["position"];
     $errors = 0;
     $noti = "<h5 class='text-danger'>โปรดกรอกข้อมูลให้ครบถ้วน</h5>". "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
     if ($username == "") {
@@ -25,12 +26,20 @@ if ($_POST == true) {
         echo $noti;
     } else {
         // check for exists username
-        $check = mysqli_query($conn, "SELECT * FROM customer WHERE username = '$username';");
-        if (mysqli_num_rows($check) >= 1) {
+        $check_cus = mysqli_query($conn, "SELECT * FROM customer WHERE username = '$username';");
+        $check_man = mysqli_query($conn, "SELECT * FROM manager WHERE username = '$username';");
+        $check_deli = mysqli_query($conn, "SELECT * FROM delivery WHERE username = '$username';");
+        if (mysqli_num_rows($check_cus) >= 1) {
             echo "<h5 class='text-danger'>มี Username นี้ในระบบแล้ว กรุณากรอกใหม่</h5>";
             echo "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
-        } else {
-            $sql = "INSERT INTO $_POST[position] (firstname, lastname, address, img, username, password) VALUES ('$firstname', '$lastname', '$address', 'user.png', '$username', '$password');";
+        } else if(mysqli_num_rows($check_man) >= 1) {
+            echo "<h5 class='text-danger'>มี Username นี้ในระบบแล้ว กรุณากรอกใหม่</h5>";
+            echo "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
+        } else if(mysqli_num_rows($check_deli) >= 1) {
+            echo "<h5 class='text-danger'>มี Username นี้ในระบบแล้ว กรุณากรอกใหม่</h5>";
+            echo "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
+        }else {
+            $sql = "INSERT INTO $position (firstname, lastname, address, img, username, password) VALUES ('$firstname', '$lastname', '$address', 'user.png', '$username', '$password');";
             $result = mysqli_query($conn, $sql, MYSQLI_ASSOC);
             if ($result == true) {
                 echo "<h5 class='text-success container'>สมัครสมาชิกเสร็จสิ้น</h5>";
