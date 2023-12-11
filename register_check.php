@@ -29,6 +29,7 @@ if ($_POST == true) {
         $check_cus = mysqli_query($conn, "SELECT * FROM customer WHERE username = '$username';");
         $check_man = mysqli_query($conn, "SELECT * FROM manager WHERE username = '$username';");
         $check_deli = mysqli_query($conn, "SELECT * FROM delivery WHERE username = '$username';");
+        $check_admin = mysqli_query($conn, "SELECT * FROM admin WHERE username = '$username';");
         if (mysqli_num_rows($check_cus) >= 1) {
             echo "<h5 class='text-danger'>มี Username นี้ในระบบแล้ว กรุณากรอกใหม่</h5>";
             echo "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
@@ -38,13 +39,17 @@ if ($_POST == true) {
         } else if(mysqli_num_rows($check_deli) >= 1) {
             echo "<h5 class='text-danger'>มี Username นี้ในระบบแล้ว กรุณากรอกใหม่</h5>";
             echo "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
-        }else {
+        } else if(mysqli_num_rows($check_admin) >= 1) {
+            echo "<h5 class='text-danger'>มี Username นี้ในระบบแล้ว กรุณากรอกใหม่</h5>";
+            echo "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
+        }
+        else {
             $sql = "INSERT INTO $position (firstname, lastname, address, img, username, password) VALUES ('$firstname', '$lastname', '$address', 'user.png', '$username', '$password');";
             $result = mysqli_query($conn, $sql, MYSQLI_ASSOC);
             if ($result == true) {
                 echo "<h5 class='text-success container'>สมัครสมาชิกเสร็จสิ้น</h5>";
                 echo "<a href='register.php' class='btn btn-danger mt-3'>กลับไปหน้าสมัครสมาชิก</a>";
-                echo "<a href='login.php' class='btn btn-success mt-3'>ไปหน้าเข้าสู่ระบบ</a>";
+                echo "<a href='login.php' class='btn btn-success mt-3 ms-3'>ไปหน้าเข้าสู่ระบบ</a>";
             }
         }
     }
@@ -73,5 +78,5 @@ if ($_POST == true) {
         <option value="delivery">Delivery</option>
     </select>
     <button class="btn btn-dark text-light my-2">Register</button>
-    <p class="text-secondary">Always have an account? <a href="login.php">Login</a></p>
+    <p class="text-secondary">Already have an account? <a href="login.php">Login</a></p>
 <?php } ?>
